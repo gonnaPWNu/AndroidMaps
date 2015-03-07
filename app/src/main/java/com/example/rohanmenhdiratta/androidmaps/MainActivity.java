@@ -59,6 +59,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     public EditText addressText;
 
+    public String placeID;
+
     GoogleMap _mMap;
 
     @Override
@@ -136,7 +138,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                      if(_response.getStatusLine().getReasonPhrase().equals("OK")) {
                         LatLng latLng = parseJSONForLatLng(responseJSON);
-                        addMarker(_mMap, latLng, "hiCity", "this is hiCity");
+
+                         if(!(address.equals(null) && placeID.equals(null)))
+                         {
+                             addMarker(_mMap, latLng, address, placeID);
+                         }
+                         else
+                         {
+                             addMarker(_mMap, latLng, "", "");
+                         }
                         Toast.makeText(getBaseContext(), "Marker Added", Toast.LENGTH_LONG);
                      }
                     else{
@@ -248,6 +258,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             //String namesLocation[] = {"location"};
             JSONObject location = geometry.getJSONObject("location");
             //Log.d("location", location.toString());
+
+            placeID = resultsObj.getString("place_id");
 
             String lat = location.getString("lat");
             String lng = location.getString("lng");
